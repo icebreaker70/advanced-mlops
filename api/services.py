@@ -48,23 +48,27 @@ class CreditScoreClassifier:
         customer_id = df.pop("customer_id")
         
         # TODO: RobustScaler 적용
-        
-        
+        for col, scaler in self.robust_scalers.items():
+            df[col] = scaler.transform(df[[col]])        
 
         # TODO: 모델 추론 결과로 확률값과 예측 레이블을 저장
-        prob = None
-        label = None
+        prob = np.max(self.model.predict(df, prediction_type="Probability"))
+        label = self.model.predict(df, prediction_type="Class").item()
         
         elapsed_ms = (time.time() - start_time) * 1000
 
         record = CreditPredictionApiLog(
             # TODO: 기본값이 존재하지 않는 컬럼에 적절한 값 매핑
+            customer_id=customer_id.item(),
+            features=data.model_dump(),
+            prediction=label,
+            confidence=prob,
+            elapsed_ms=elapsed_ms,            
         )
         
         # TODO: 로깅할 값을 테이블에 적재 후 커밋
-
-
-
+        self.db.add(record)
+        self.db.commit()
 
         return Response(customer_id=customer_id, predict=label, confidence=prob)
 

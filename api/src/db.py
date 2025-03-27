@@ -12,6 +12,9 @@ feature_store_url = os.getenv("FEATURE_STORE_URL")
 
 engine = create_engine(feature_store_url, echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+
 Base = declarative_base()
 
 

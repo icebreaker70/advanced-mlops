@@ -6,13 +6,13 @@
 services:
   bentoml_service:
     build:
-      context: 
-      dockerfile: 
+      context: ../..
+      dockerfile: api/docker/Dockerfile
     image: credit_score_classification-deploy:latest
     container_name: credit_score_classification_deploy
     volumes:
-      - 
-      - 
+      - ${HOME}/airflow/artifacts:/home/codespace/artifacts
+      - ${HOME}/bentoml:/home/codespace/bentoml
     environment:
       PYTHONPATH: /home/codespace
       ARTIFACTS_PATH: /home/codespace/artifacts
@@ -20,7 +20,7 @@ services:
     ports:
       - "3000:3000"
     command: >
-      
+      bentoml serve services:CreditScoreClassifier
     networks:
       mlops_network:
 networks:
