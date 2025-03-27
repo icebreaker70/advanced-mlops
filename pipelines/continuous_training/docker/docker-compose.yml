@@ -5,12 +5,14 @@
 services:
   continuous_training_pipeline:
     build:
-      context: 
-      dockerfile:
+      context: ../../..
+      dockerfile: pipelines/continuous_training/docker/Dockerfile
     image: credit_score_classification:ct-pipeline-latest
     container_name: credit_score_classification_ct_pipeline
     volumes:
-      - 
+      - ${HOME}/airflow/artifacts:/home/codespace/artifacts
+      - ${HOME}/bentoml:/home/codespace/bentoml
+      - ${HOME}/mlruns:/home/codespace/mlruns
     environment:
       PYTHONPATH: /home/codespace
       ARTIFACTS_PATH: /home/codespace/artifacts

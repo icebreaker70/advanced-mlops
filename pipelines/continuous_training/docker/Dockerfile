@@ -5,9 +5,10 @@ ARG USER_HOME=/home/codespace
 
 # TODO: 인자 정보 추가
 # 모든 경로는 프로젝트 루트 폴더를 기준으로 생각
-ARG UTIL_PATH=
-ARG PREPROCESSING_PATH=
-ARG REQUIREMENTS_PATH=
+ARG UTIL_PATH=utils
+ARG PREPROCESSING_PATH=pipelines/continuous_training/data_preprocessing
+ARG REQUIREMENTS_PATH=pipelines/continuous_training/docker
+ARG TRAINING_PATH=pipelines/continuous_training/training
 
 RUN groupadd --gid 1000 codespace \
     && useradd --uid 1000 --gid codespace --shell /bin/bash --create-home codespace
@@ -15,6 +16,8 @@ RUN groupadd --gid 1000 codespace \
 COPY --chown=codespace:codespace ${UTIL_PATH}/ ${USER_HOME}/utils
 COPY --chown=codespace:codespace ${PREPROCESSING_PATH}/preprocessor.py \
     ${USER_HOME}/data_preprocessing/
+COPY --chown=codespace:codespace ${TRAINING_PATH}/trainer.py \
+    ${USER_HOME}/training/    
 COPY --chown=codespace:codespace ${REQUIREMENTS_PATH}/requirements.txt \
     ${USER_HOME}/
 
